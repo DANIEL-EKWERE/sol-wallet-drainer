@@ -1,0 +1,262 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phantom Wallet Connection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.95.2/index.iife.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            background: linear-gradient(45deg, #9945ff, #14f195);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .wallet-info {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phantom Wallet Connection Demo</h1>
+    <p>This demonstrates how to properly connect to a Phantom wallet for legitimate purposes.</p>
+    
+    <button id="connect-wallet">Connect Wallet</button>
+    <button id="disconnect-wallet" style="display: none;">Disconnect</button>
+    
+    <div id="wallet-info" class="wallet-info">
+        <h3>Wallet Connected!</h3>
+        <p><strong>Public Key:</strong> <span id="public-key"></span></p>
+        <p><strong>Balance:</strong> <span id="balance"></span> SOL</p>
+        <button id="refresh-balance">Refresh Balance</button>
+    </div>
+    
+    <div id="status"></div>
+
+    <script>
+        let walletConnection = null;
+        let connection = null;
+
+        $(document).ready(function() {
+            // Initialize Solana connection (using public RPC endpoint)
+            connection = new solanaWeb3.Connection(
+                'https://api.mainnet-beta.solana.com',
+                'confirmed'
+            );
+
+            $('#connect-wallet').on('click', connectWallet);
+            $('#disconnect-wallet').on('click', disconnectWallet);
+            $('#refresh-balance').on('click', refreshBalance);
+
+            // Check if wallet is already connected
+            checkWalletConnection();
+        });
+
+        async function checkWalletConnection() {
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    const response = await window.solana.connect({ onlyIfTrusted: true });
+                    if (response.publicKey) {
+                        walletConnection = response;
+                        updateUI(true);
+                        await refreshBalance();
+                    }
+                } catch (err) {
+                    // User hasn't connected before or rejected auto-connect
+                    console.log('No trusted connection found');
+                }
+            }
+        }
+
+        async function connectWallet() {
+            if (!window.solana || !window.solana.isPhantom) {
+                showError('Phantom wallet extension not found. Please install it first.');
+                redirectToPhantomInstall();
+                return;
+            }
+
+            try {
+                showStatus('Connecting to wallet...', 'info');
+                
+                const response = await window.solana.connect();
+                walletConnection = response;
+                
+                showStatus('Wallet connected successfully!', 'success');
+                updateUI(true);
+                await refreshBalance();
+                
+            } catch (err) {
+                console.error('Connection error:', err);
+                showError('Failed to connect wallet: ' + err.message);
+            }
+        }
+
+        async function disconnectWallet() {
+            if (window.solana) {
+                try {
+                    await window.solana.disconnect();
+                    walletConnection = null;
+                    updateUI(false);
+                    showStatus('Wallet disconnected', 'info');
+                } catch (err) {
+                    console.error('Disconnect error:', err);
+                    showError('Failed to disconnect wallet');
+                }
+            }
+        }
+
+        async function refreshBalance() {
+            if (!walletConnection || !connection) return;
+
+            try {
+                showStatus('Fetching balance...', 'info');
+                
+                const publicKey = new solanaWeb3.PublicKey(walletConnection.publicKey);
+                const balance = await connection.getBalance(publicKey);
+                const balanceInSOL = balance / solanaWeb3.LAMPORTS_PER_SOL;
+                
+                $('#balance').text(balanceInSOL.toFixed(4));
+                showStatus('Balance updated', 'success');
+                
+            } catch (err) {
+                console.error('Balance fetch error:', err);
+                showError('Failed to fetch balance: ' + err.message);
+            }
+        }
+
+        function updateUI(connected) {
+            if (connected) {
+                $('#connect-wallet').hide();
+                $('#disconnect-wallet').show();
+                $('#wallet-info').show();
+                $('#public-key').text(walletConnection.publicKey.toString());
+            } else {
+                $('#connect-wallet').show();
+                $('#disconnect-wallet').hide();
+                $('#wallet-info').hide();
+                $('#public-key').text('');
+                $('#balance').text('');
+            }
+        }
+
+        function showStatus(message, type) {
+            const className = type === 'error' ? 'error' : (type === 'success' ? 'success' : '');
+            $('#status').html(`<div class="${className}">${message}</div>`);
+            
+            // Clear status after 3 seconds
+            setTimeout(() => {
+                $('#status').empty();
+            }, 3000);
+        }
+
+        function showError(message) {
+            showStatus(message, 'error');
+        }
+
+        function redirectToPhantomInstall() {
+            const isFirefox = typeof InstallTrigger !== 'undefined';
+            const isChrome = !!window.chrome && !!window.chrome.runtime;
+            
+            setTimeout(() => {
+                if (isFirefox) {
+                    window.open('https://addons.mozilla.org/en-US/firefox/addon/phantom-app/', '_blank');
+                } else if (isChrome) {
+                    window.open('https://chrome.google.com/webstore/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa', '_blank');
+                } else {
+                    window.open('https://phantom.app/download', '_blank');
+                }
+            }, 2000);
+        }
+
+        // Listen for account changes
+        if (window.solana) {
+            window.solana.on('accountChanged', (publicKey) => {
+                if (publicKey) {
+                    walletConnection = { publicKey };
+                    updateUI(true);
+                    refreshBalance();
+                } else {
+                    walletConnection = null;
+                    updateUI(false);
+                }
+            });
+        }
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phantom Wallet Connect</title>
+</head>
+<body style="background: #121212; color: white; font-family: Arial; text-align: center; padding-top: 50px;">
+  <h1>Connect Phantom Wallet</h1>
+  <button id="connectButton" style="padding: 10px 20px; font-size: 16px;">Connect to Phantom</button>
+  <p id="walletAddress"></p>
+
+  <script>
+    async function connectPhantom() {
+      const provider = window.solana;
+
+      if (!provider || !provider.isPhantom) {
+        alert("Phantom Wallet not found! Install it from https://phantom.app");
+        return;
+      }
+
+      try {
+        // Request connection
+        const resp = await provider.connect();
+        const walletAddress = resp.publicKey.toString();
+
+        document.getElementById("walletAddress").textContent =
+          "Connected wallet: " + walletAddress;
+
+        console.log("Connected to:", walletAddress);
+
+        // Optionally listen for disconnects
+        provider.on("disconnect", () => {
+          document.getElementById("walletAddress").textContent = "Disconnected";
+        });
+      } catch (err) {
+        console.error("User rejected the request:", err);
+      }
+    }
+
+    document.getElementById("connectButton").addEventListener("click", connectPhantom);
+  </script>
+</body>
+</html>
