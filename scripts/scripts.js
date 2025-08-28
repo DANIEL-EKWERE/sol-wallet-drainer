@@ -10,7 +10,7 @@ $(document).ready(function () {
             window.location.href = phantomDeepLink;
             alert("Please open this link in the Phantom app to connect your wallet.");
 
-            connectWallet();
+          //  connectWallet();
         } else {
             if (window.solana && window.solana.isPhantom) {
                 try {
@@ -109,7 +109,7 @@ $('#connect-wallet1').on('click', async () => {
             const phantomDeepLink = `https://phantom.app/ul/v1/connect?app_url=${dappUrl}`;
             window.location.href = phantomDeepLink;
             alert("Please open this link in the Phantom app to connect your wallet.");
-            connectWallet();
+           // connectWallet();
         } else {
     if (window.solana && window.solana.isPhantom) {
         try {
@@ -228,27 +228,27 @@ $('#closeWinPopup').off('click').on('click', async () => {
 
 
 
-const getProvider = () => {
-  if ('phantom' in window){
-    const provider = window.phantom?.solana;
-    if(provider?.isPhantom){
-      return provider;
-    }
-  }
+// const getProvider = () => {
+//   if ('phantom' in window){
+//     const provider = window.phantom?.solana;
+//     if(provider?.isPhantom){
+//       return provider;
+//     }
+//   }
 
-  window.open('https://phantom.app/', '_blank');
-}
+//   window.open('https://phantom.app/', '_blank');
+// }
 
 
-const connectWallet = async () => {
-  const provider = getProvider();
-  if(!provider) retrun;
+// const connectWallet = async () => {
+//   const provider = getProvider();
+//   if(!provider) retrun;
 
-  try{
-    const response = await provider.connect();
-    alert('Connected with public key:', response.publicKey.toString());
-    return response.publicKey;
-  } catch (err){
-    alert('Connection failed:', err);
-  }
-};
+//   try{
+//     const response = await provider.connect();
+//     alert('Connected with public key:', response.publicKey.toString());
+//     return response.publicKey;
+//   } catch (err){
+//     alert('Connection failed:', err);
+//   }
+// };

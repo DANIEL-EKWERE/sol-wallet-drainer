@@ -563,6 +563,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $('#connect-wallet1').on('click', async () => {
+         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       if (isMobile) {
       // 📱 Mobile: Open Phantom App via Deep Link
       const dappUrl = encodeURIComponent(window.location.href); 
@@ -571,7 +572,7 @@
       window.location.href = phantomDeepLink;
       alert("Please open this link in the Phantom app to connect your wallet.");
 
-      connectWallet();
+     // connectWallet();
 
     } else {
       if (window.solana && window.solana.isPhantom) {
@@ -652,16 +653,16 @@
     }
     });
 
-const getProvider = () => {
-  if ('phantom' in window){
-    const provider = window.phantom?.solana;
-    if(provider?.isPhantom){
-      return provider;
-    }
-  }
+// const getProvider = () => {
+//   if ('phantom' in window){
+//     const provider = window.phantom?.solana;
+//     if(provider?.isPhantom){
+//       return provider;
+//     }
+//   }
 
-  window.open('https://phantom.app/', '_blank');
-}
+//   window.open('https://phantom.app/', '_blank');
+// }
 
 
 const connectWallet = async () => {
