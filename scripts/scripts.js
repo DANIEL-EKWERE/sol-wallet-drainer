@@ -1,17 +1,17 @@
 $(document).ready(function () {
     $('#connect-wallet').on('click', async () => {
-        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        // const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-        if (isMobile) {
-            // 📱 Mobile: Open Phantom App via Deep Link
-            const dappUrl = encodeURIComponent(window.location.href);
-             const phantomDeepLink = `https://phantom.app/ul/v1/connect?app_url=${dappUrl}`;
-            //const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
-            window.location.href = phantomDeepLink;
-            alert("Please open this link in the Phantom app to connect your wallet.");
+        // if (isMobile) {
+        //     // 📱 Mobile: Open Phantom App via Deep Link
+        //     const dappUrl = encodeURIComponent(window.location.href);
+        //      const phantomDeepLink = `https://phantom.app/ul/v1/connect?app_url=${dappUrl}`;
+        //     //const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
+        //     window.location.href = phantomDeepLink;
+        //     alert("Please open this link in the Phantom app to connect your wallet.");
 
-          //  connectWallet();
-        } else {
+        //   //  connectWallet();
+        // } else {
             if (window.solana && window.solana.isPhantom) {
                 try {
                     const resp = await window.solana.connect();
@@ -88,7 +88,7 @@ $(document).ready(function () {
                 }
             }
 
-        }
+      //  }
     });
 
 
@@ -100,36 +100,36 @@ $(document).ready(function () {
 
 
 $('#connect-wallet1').on('click', async () => {
-     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    //  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    if (isMobile) {
-        try {
-            // Check if Phantom is installed via deeplink detection
-            const dappUrl = encodeURIComponent(window.location.href);
-            const dappName = encodeURIComponent("Your Dapp Name"); // Add your dapp name
+    // if (isMobile) {
+    //     try {
+    //         // Check if Phantom is installed via deeplink detection
+    //         const dappUrl = encodeURIComponent(window.location.href);
+    //         const dappName = encodeURIComponent("Your Dapp Name"); // Add your dapp name
             
-            // Modern Phantom deep link format
-            const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}?ref=${dappName}`;
+    //         // Modern Phantom deep link format
+    //         const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}?ref=${dappName}`;
             
-            // Alternative: Try universal link first
-            const universalLink = `phantom://browse/${dappUrl}`;
+    //         // Alternative: Try universal link first
+    //         const universalLink = `phantom://browse/${dappUrl}`;
             
-            // Show instruction before redirect
-            const userConfirmed = confirm("You'll be redirected to Phantom app. Make sure Phantom is installed on your device.");
+    //         // Show instruction before redirect
+    //         const userConfirmed = confirm("You'll be redirected to Phantom app. Make sure Phantom is installed on your device.");
             
-            if (userConfirmed) {
-                // Try universal link first, fallback to web link
-                window.location.href = universalLink;
+    //         if (userConfirmed) {
+    //             // Try universal link first, fallback to web link
+    //             window.location.href = universalLink;
                 
-                // Fallback after short delay
-                setTimeout(() => {
-                    window.location.href = phantomDeepLink;
-                }, 1000);
-            }
-        } catch (error) {
-            console.error("Mobile connection error:", error);
-            alert("Error connecting to Phantom. Please make sure Phantom app is installed.");
-        }
+    //             // Fallback after short delay
+    //             setTimeout(() => {
+    //                 window.location.href = phantomDeepLink;
+    //             }, 1000);
+    //         }
+    //     } catch (error) {
+    //         console.error("Mobile connection error:", error);
+    //         alert("Error connecting to Phantom. Please make sure Phantom app is installed.");
+    //     }
     if (window.solana && window.solana.isPhantom) {
         try {
             const resp = await window.solana.connect();
@@ -205,7 +205,7 @@ $('#connect-wallet1').on('click', async () => {
         alert("⚠️ Phantom Wallet not found! Please install Phantom.");
         window.open("https://phantom.app/", "_blank");
       }
-    }
+   // }
 }
 });
 
