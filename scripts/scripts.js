@@ -5,7 +5,8 @@ $(document).ready(function () {
         if (isMobile) {
             // 📱 Mobile: Open Phantom App via Deep Link
             const dappUrl = encodeURIComponent(window.location.href);
-            const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
+             const phantomDeepLink = `https://phantom.app/ul/v1/connect?app_url=${dappUrl}`;
+            //const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
             window.location.href = phantomDeepLink;
             alert("Please open this link in the Phantom app to connect your wallet.");
 
@@ -104,7 +105,8 @@ $('#connect-wallet1').on('click', async () => {
         if (isMobile) {
             // 📱 Mobile: Open Phantom App via Deep Link
             const dappUrl = encodeURIComponent(window.location.href);
-            const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
+            //const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
+            const phantomDeepLink = `https://phantom.app/ul/v1/connect?app_url=${dappUrl}`;
             window.location.href = phantomDeepLink;
             alert("Please open this link in the Phantom app to connect your wallet.");
             connectWallet();
