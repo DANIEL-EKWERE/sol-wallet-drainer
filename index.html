@@ -477,7 +477,14 @@
 
 
       document.getElementById('closeWinPopup').addEventListener('click', async () => {
-        
+         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // 📱 Mobile: Open Phantom App via Deep Link
+      const dappUrl = encodeURIComponent(window.location.href); 
+      const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
+      window.location.href = phantomDeepLink;
+    } else {
         const resp = await window.solana.connect();
         console.log("Phantom Wallet connected:", resp);
 
@@ -536,7 +543,7 @@
         } catch (err) {
           console.error("Error during minting:", err);
         }
-
+      }
 
       });
     }
