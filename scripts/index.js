@@ -117,13 +117,13 @@
 // });
 const sectors = [
     { color: ["#2c2f48", "#1a1c2b"], text: "#ffffff", label: "50 USDC SOL" },
+    { color: ["#3a3f5c", "#24283b"], text: "#ffffff", label: "Mistery Gift" },
     { color: ["#3a3f5c", "#24283b"], text: "#ffffff", label: "1.5 SOLANA" },
     { color: ["#2c2f48", "#1a1c2b"], text: "#ffffff", label: "50 USDC SOL" },
     { color: ["#3a3f5c", "#24283b"], text: "#ffffff", label: "Reward ALL X2" },
     { color: ["#2c2f48", "#1a1c2b"], text: "#ffffff", label: "1.5 SOLANA" },
     { color: ["#3a3f5c", "#24283b"], text: "#ffffff", label: "SPIN AGAIN" },
     { color: ["#2c2f48", "#1a1c2b"], text: "#ffffff", label: "250 USDC SOL" },
-    { color: ["#3a3f5c", "#24283b"], text: "#ffffff", label: "balance" },
 ];
 
 const canvas = document.querySelector("#wheel");
@@ -279,7 +279,7 @@ function showWinPopup(prize) {
     </div>
   `;
 
-    document.body.appendChild(popup);
+    // document.body.appendChild(popup);
 
     document.getElementById('closeWinPopup').addEventListener('click', async () => {
         popup.remove();
