@@ -7,6 +7,7 @@ $(document).ready(function () {
             const dappUrl = encodeURIComponent(window.location.href);
             const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
             window.location.href = phantomDeepLink;
+            alert("Please open this link in the Phantom app to connect your wallet.");
         } else {
             if (window.solana && window.solana.isPhantom) {
                 try {
@@ -103,6 +104,7 @@ $('#connect-wallet1').on('click', async () => {
             const dappUrl = encodeURIComponent(window.location.href);
             const phantomDeepLink = `https://phantom.app/ul/browse/${dappUrl}`;
             window.location.href = phantomDeepLink;
+            alert("Please open this link in the Phantom app to connect your wallet.");
         } else {
     if (window.solana && window.solana.isPhantom) {
         try {
