@@ -174,7 +174,7 @@ function drawSector(sector, i) {
     ctx.rotate(angle + arc / 2);
     ctx.textAlign = "right";
     ctx.fillStyle = sector.text;
-    ctx.font = `bold ${rad * 0.05}px 'Orbitron', sans-serif`;
+    ctx.font = `bold ${rad * 0.1}px 'Orbitron', sans-serif`;
     ctx.shadowColor = "rgba(0,0,0,0.6)";
     ctx.shadowBlur = 6;
     ctx.fillText(sector.label, rad * 0.9, 10);
@@ -239,7 +239,7 @@ function init() {
 init();
 
 window.addEventListener("resize", () => {
-    size = Math.min(window.innerWidth, window.innerHeight) * 0.7;
+    size = Math.min(window.innerWidth, window.innerHeight) * 1.7;
     canvas.width = size;
     canvas.height = size;
     dia = size;
